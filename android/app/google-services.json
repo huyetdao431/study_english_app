@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "772517225552",
+    "project_id": "vocabularylearning-19f75",
+    "storage_bucket": "vocabularylearning-19f75.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:772517225552:android:b5024853a3ba9996ed1d55",
+        "android_client_info": {
+          "package_name": "com.example.study_english_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "772517225552-mn69b94ft05odudvdvhgasj1gjl7qg0c.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB6prilkMMgHmvwy5Wu4n_05MYgh8wOyNE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "772517225552-mn69b94ft05odudvdvhgasj1gjl7qg0c.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
