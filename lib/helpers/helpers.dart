@@ -1,10 +1,5 @@
-import 'package:url_launcher/url_launcher.dart';
-
-void openURL (String url) async{
-  final uri = Uri.parse(url.isEmpty ? 'https://google.com' : url);
-  if(await canLaunchUrl(uri)) {
-    await launchUrl(uri);
-  } else {
-    throw "Không thể mở liên kết";
-  }
+abstract class Helper {
+  Future<void> openUrl(String url);
+  bool isValidEmail(String email);
+  bool isValidPassword(String password);
 }

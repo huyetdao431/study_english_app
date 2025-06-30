@@ -1,6 +1,8 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:study_english_app/screens/card_merge_screen/card_merge_screen.dart';
 import 'package:study_english_app/screens/flashcard_screen/flashcard_screen.dart';
+import 'package:study_english_app/screens/learn_screen/learn_screen.dart';
 
 import '../../core/color.dart';
 import '../../core/text.dart';
@@ -181,7 +183,9 @@ class MiniGameNavigatorLabel extends StatelessWidget {
           height: 50,
           child: NavigatorButton(
             title: "Học",
-            onPressed: () {},
+            onPressed: () {
+              Navigator.of(context).pushNamed(LearnScreen.route);
+            },
             icon: Icon(Icons.file_copy, color: AppColors.primaryDark, size: 30),
           ),
         ),
@@ -190,8 +194,10 @@ class MiniGameNavigatorLabel extends StatelessWidget {
           width: width,
           height: 50,
           child: NavigatorButton(
-            title: "flashcard",
-            onPressed: () {},
+            title: "Ghép thẻ",
+            onPressed: () {
+              Navigator.of(context).pushNamed(CardMergeScreen.route);
+            },
             icon: Icon(Icons.file_copy, color: AppColors.primaryDark, size: 30),
           ),
         ),
