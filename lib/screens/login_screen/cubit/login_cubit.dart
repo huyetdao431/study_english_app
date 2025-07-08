@@ -14,9 +14,8 @@ class LoginCubit extends Cubit<LoginState> {
     try {
       User? user = await api.loginWithEmail(email, password);
       if (user != null) {
+        await api.createUser(user);
         emit(state.copyWith(loadStatus: LoadStatus.Success));
-      } else {
-        emit(state.copyWith(loadStatus: LoadStatus.Error));
       }
     } catch (e) {
       emit(state.copyWith(loadStatus: LoadStatus.Error));
@@ -28,6 +27,7 @@ class LoginCubit extends Cubit<LoginState> {
     try {
       User? user = await api.loginWithGoogle();
       if (user != null) {
+        await api.createUser(user);
         emit(state.copyWith(loadStatus: LoadStatus.Success));
       } else {
         emit(state.copyWith(loadStatus: LoadStatus.Error));
