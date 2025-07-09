@@ -14,7 +14,8 @@ class AccountCubit extends Cubit<AccountState> {
     emit(state.copyWith(loadStatus: LoadStatus.Loading));
     try {
       UserInformation user = await api.getUser();
-      emit(state.copyWith(loadStatus: LoadStatus.Success, user: user));
+      int usernameChangeTime = await api.getLastUsernameChangeTime();
+      emit(state.copyWith(loadStatus: LoadStatus.Success, user: user, usernameChangeTime: usernameChangeTime));
     } catch (e) {
       emit(state.copyWith(loadStatus: LoadStatus.Error));
     }
@@ -103,6 +104,18 @@ class AccountCubit extends Cubit<AccountState> {
       emit(state.copyWith(loadStatus: LoadStatus.Success, user: state.user.copyWith(avt: imagePath)));
     } catch (e) {
       emit(state.copyWith(loadStatus: LoadStatus.Error));
+    }
+  }
+
+  Future<int> getLastUsernameChangeTime() async {
+    emit(state.copyWith(loadStatus: LoadStatus.Loading));
+    try {
+      int lastLoginTime = await api.getLastUsernameChangeTime();
+      emit(state.copyWith(loadStatus: LoadStatus.Success));
+      return lastLoginTime;
+    } catch (e) {
+      emit(state.copyWith(loadStatus: LoadStatus.Error));
+      return 0;
     }
   }
 }

@@ -250,6 +250,7 @@ class ApiImplement implements Api {
       if (user != null) {
         await _firestore.collection('accounts').doc(user.uid).update({
           'username': username,
+          'usernameChangeTime': FieldValue.serverTimestamp(),
         });
       }
     } catch (e) {
@@ -312,5 +313,31 @@ class ApiImplement implements Api {
     } catch (e) {
       log.e('error', "Failed to update avatar: $e");
     }
+  }
+
+  @override
+  Future<int> getLastUsernameChangeTime() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      String? uid = prefs.getString('uid');
+      if (uid != null) {
+        final docSnapshot = await _firestore.collection('accounts').doc(uid).get();
+        if (docSnapshot.exists) {
+          final data = docSnapshot.data();
+          if (data != null && data['usernameChangeTime'] != null) {
+            Timestamp? timestamp = data['usernameChangeTime'];
+            if (timestamp != null) {
+              DateTime lastLoginTime = timestamp.toDate();
+              DateTime now = DateTime.now();
+              Duration difference = now.difference(lastLoginTime);
+              return difference.inDays;
+            }
+          }
+        }
+      }
+    } catch (e) {
+      log.e('error', "Failed to get last login time: $e");
+    }
+    return 0; // Trả về 0 nếu không tìm thấy hoặc có lỗi
   }
 }

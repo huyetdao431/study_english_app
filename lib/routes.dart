@@ -66,7 +66,7 @@ Route<dynamic>? mainRoute(RouteSettings settings) {
       return MaterialPageRoute(builder: (context) =>
           BlocProvider.value(
             value: cubit,
-            child: EditUserInfoScreen(fieldType: fieldType, cubit: cubit, oldValue: oldValue,),
+            child: EditUserInfoScreen(fieldType: fieldType, oldValue: oldValue,),
           ));
     case AvatarScreen.route:
       var cubit = (settings.arguments as Map<String,

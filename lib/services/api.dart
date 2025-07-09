@@ -35,4 +35,6 @@ abstract class Api {
   Future<void> changePassword(String password);
 
   Future<void> changeAvatar(String imagePath);
+
+  Future<int> getLastUsernameChangeTime();
 }

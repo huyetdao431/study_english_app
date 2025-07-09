@@ -30,6 +30,10 @@ class ImagePreviewScreen extends StatelessWidget {
             backgroundColor: AppColors.black,
             actions: [
               PopupMenuButton(
+                icon: const Icon(
+                  Icons.more_vert,
+                  color: Colors.white,
+                ),
                 itemBuilder: (BuildContext context) {
                   return [
                     PopupMenuItem(
