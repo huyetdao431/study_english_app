@@ -51,11 +51,11 @@ class _MainScreenState extends State<MainScreen> {
           }
         },
         items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Trang chủ'),
-          BottomNavigationBarItem(icon: Icon(Icons.videogame_asset), label: 'Mini Game'),
-          BottomNavigationBarItem(icon: Icon(Icons.add_circle, size: 35), label: ''),
-          BottomNavigationBarItem(icon: Icon(Icons.folder_copy), label: 'Thư viện'),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Tôi'),
+          BottomNavigationBarItem(icon: Icon(Icons.home, size: 30,), label: 'Trang chủ'),
+          BottomNavigationBarItem(icon: Icon(Icons.videogame_asset, size: 30,), label: 'Mini Game'),
+          BottomNavigationBarItem(icon: Icon(Icons.add_circle, size: 45), label: ''),
+          BottomNavigationBarItem(icon: Icon(Icons.folder_copy, size: 30,), label: 'Thư viện'),
+          BottomNavigationBarItem(icon: Icon(Icons.person, size: 30,), label: 'Tôi'),
         ],
       ),
     );

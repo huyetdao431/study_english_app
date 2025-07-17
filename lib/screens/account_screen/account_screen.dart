@@ -72,9 +72,15 @@ class _PageState extends State<Page> {
                                   backgroundImage: Image.asset(cubit.state.user.avt).image,
                                 )
                                     :
-                                CircleAvatar(
-                                  radius: 50,
-                                  backgroundColor: AppColors.darkWhite,
+                                Container(
+                                  alignment: Alignment.center,
+                                  width: 100,
+                                  height: 100,
+                                  decoration: BoxDecoration(
+                                    color: AppColors.darkWhite,
+                                    border: Border.all(color: AppColors.primaryDark, width: 2),
+                                    shape: BoxShape.circle,
+                                  ),
                                   child: Text(
                                     cubit.state.user.username.isNotEmpty
                                         ? cubit.state.user.username[0].toUpperCase()
