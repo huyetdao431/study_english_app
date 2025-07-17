@@ -8,7 +8,6 @@ import 'package:study_english_app/core/text.dart';
 import 'package:study_english_app/helpers/helper_implement.dart';
 import 'package:study_english_app/helpers/helpers.dart';
 import 'package:study_english_app/screens/login_screen/cubit/login_cubit.dart';
-import 'package:study_english_app/screens/login_screen/email_verification_screen.dart';
 import 'package:study_english_app/screens/login_screen/login_with_email.dart';
 import 'package:study_english_app/widgets/others/show_dialog.dart';
 import 'package:study_english_app/widgets/text/edit_text.dart';

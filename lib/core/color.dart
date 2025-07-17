@@ -22,8 +22,8 @@ class AppColors {
   static const Color darkGray = Color(0xFF757575);     // Văn bản phụ
 
   // --- Status Colors ---
-  static const Color successGreen = Color(0xFF43A047);      // Thành công
-  static const Color warningOrange = Color(0xFFFB8C00);     // Cảnh báo
-  static const Color errorRed = Color(0xFFE53935);          // Báo lỗi
+  static const Color successGreen = Color(0xFF00C853);      // Thành công
+  static const Color warningOrange = Color(0xFFFFA000);     // Cảnh báo
+  static const Color errorRed = Color(0xFFFF3D00);          // Báo lỗi
   static const Color infoCyan = Color(0xFF00ACC1);          // Thông tin
 }

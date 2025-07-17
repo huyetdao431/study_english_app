@@ -1,5 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:study_english_app/models/categories.dart';
 import 'package:study_english_app/models/user.dart';
+import 'package:study_english_app/models/word.dart';
+
+import '../models/courses.dart';
 
 abstract class Api {
   //authentication methods
@@ -23,6 +27,8 @@ abstract class Api {
 
   Future<UserInformation> getUser();
 
+  Future<UserInformation> getUserById(String userId);
+
   // user management methods
   Future<bool> reAuthenticateWithCheck({String? password});
 
@@ -37,4 +43,35 @@ abstract class Api {
   Future<void> changeAvatar(String imagePath);
 
   Future<int> getLastUsernameChangeTime();
+
+  // course management methods
+  Future<List<Courses>> getCourses();
+
+  Future<List<Categories>> getCategories();
+
+  Future<List<Word>> getWords(String courseId);
+
+  Future<Map<String, dynamic>> getCourseById(String courseId);
+
+  Future<List<Map<String, dynamic>>> getUserCourses();
+
+  Future<List<Map<String, dynamic>>> getLearnedCourses();
+
+  // Future<void> addCourseToUser(String courseId);
+  //
+  // Future<void> addUserToCourse(String courseId);
+
+  Future<void> enrollUserToCourse(String courseId);
+
+  Future<void> updateCourse(
+    String courseId,
+    String courseName,
+    List<Word> words,
+  );
+
+  Future<void> createCourse(String courseName, List<Word> words);
+
+  Future<void> deleteCourse(String courseId);
+
+  Future<void> removeUserFromCourse(String courseId);
 }

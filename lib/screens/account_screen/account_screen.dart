@@ -50,7 +50,7 @@ class _PageState extends State<Page> {
           return cubit.state.loadStatus == LoadStatus.Loading
               ? Center(child: CircularProgressIndicator())
               : Padding(
-                padding: const EdgeInsets.all(12.0),
+                padding: const EdgeInsets.symmetric(horizontal: 12.0),
                 child: SingleChildScrollView(
                   child: Column(
                     children: [

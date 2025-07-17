@@ -15,7 +15,7 @@ class _TextToSpeechButtonState extends State<TextToSpeechButton> {
 
   Future<void> _speak() async {
     await _flutterTts.setLanguage('en-US');
-    await _flutterTts.setSpeechRate(1.0);
+    await _flutterTts.setSpeechRate(0.5);
     await _flutterTts.speak(widget.text);
   }
 

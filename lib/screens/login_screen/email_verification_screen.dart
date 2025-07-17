@@ -25,7 +25,6 @@ class EmailVerificationScreen extends StatelessWidget {
         ),
         body: BlocBuilder<LoginCubit, LoginState>(
           builder: (context, state) {
-            var cubit = context.read<LoginCubit>();
             return Padding(
               padding: const EdgeInsets.all(16),
               child: Column(
