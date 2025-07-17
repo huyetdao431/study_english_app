@@ -7,6 +7,7 @@ class Courses {
   final String createdBy;
   final DateTime createdAt;
   final List<Word> words;
+  final bool isPublic;
 
   //<editor-fold desc="Data Methods">
   const Courses({
@@ -16,6 +17,7 @@ class Courses {
     required this.createdBy,
     required this.createdAt,
     required this.words,
+    required this.isPublic,
   });
 
   @override
@@ -28,7 +30,8 @@ class Courses {
           totalWords == other.totalWords &&
           createdBy == other.createdBy &&
           createdAt == other.createdAt &&
-          words == other.words);
+          words == other.words &&
+          isPublic == other.isPublic);
 
   @override
   int get hashCode =>
@@ -37,7 +40,8 @@ class Courses {
       totalWords.hashCode ^
       createdBy.hashCode ^
       createdAt.hashCode ^
-      words.hashCode;
+      words.hashCode ^
+      isPublic.hashCode;
 
   @override
   String toString() {
@@ -48,6 +52,7 @@ class Courses {
         ' createdBy: $createdBy,' +
         ' createdAt: $createdAt,' +
         ' words: $words,' +
+        ' isPublic: $isPublic,' +
         '}';
   }
 
@@ -58,6 +63,7 @@ class Courses {
     String? createdBy,
     DateTime? createdAt,
     List<Word>? words,
+    bool? isPublic,
   }) {
     return Courses(
       id: id ?? this.id,
@@ -66,6 +72,7 @@ class Courses {
       createdBy: createdBy ?? this.createdBy,
       createdAt: createdAt ?? this.createdAt,
       words: words ?? this.words,
+      isPublic: isPublic ?? this.isPublic,
     );
   }
 
@@ -77,6 +84,7 @@ class Courses {
       'createdBy': this.createdBy,
       'createdAt': this.createdAt,
       'words': this.words,
+      'isPublic': this.isPublic,
     };
   }
 
@@ -88,6 +96,7 @@ class Courses {
       createdBy: map['createdBy'] as String,
       createdAt: map['createdAt'] as DateTime,
       words: map['words'] as List<Word>,
+      isPublic: map['isPublic'] as bool,
     );
   }
 

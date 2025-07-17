@@ -100,54 +100,59 @@ class LearnedCoursePage extends StatelessWidget {
               "Trước đó",
             ].where((key) => grouped.containsKey(key)).toList();
 
-        return ListView.builder(
-          itemCount: sortedKeys.length,
-          itemBuilder: (context, index) {
-            final groupName = sortedKeys[index];
-            final courses = grouped[groupName]!;
+        return RefreshIndicator(
+          onRefresh: () async {
+            await cubit.fetchCourses();
+          },
+          child: ListView.builder(
+            itemCount: sortedKeys.length,
+            itemBuilder: (context, index) {
+              final groupName = sortedKeys[index];
+              final courses = grouped[groupName]!;
 
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(height: 16),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                  child: Text(
-                    groupName,
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-                ...courses.map(
-                  (course) => CourseCard(
-                    course: course,
-                    popUpMenuItem: Align(
-                      alignment: Alignment.centerRight,
-                      child: PopupMenuButton(
-                        itemBuilder: (context) {
-                          return [
-                            PopupMenuItem(
-                              value: 'delete',
-                              child: Text("Xóa khỏi khóa học đã học"),
-                            ),
-                          ];
-                        },
-                        onSelected: (value) async {
-                          if (value == 'delete') {
-                            await cubit.removeUserFromCourse(
-                              course['course'].id,
-                            );
-                          }
-                        },
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(height: 16),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                    child: Text(
+                      groupName,
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
-                ),
-              ],
-            );
-          },
+                  ...courses.map(
+                    (course) => CourseCard(
+                      course: course,
+                      popUpMenuItem: Align(
+                        alignment: Alignment.centerRight,
+                        child: PopupMenuButton(
+                          itemBuilder: (context) {
+                            return [
+                              PopupMenuItem(
+                                value: 'delete',
+                                child: Text("Xóa khỏi khóa học đã học"),
+                              ),
+                            ];
+                          },
+                          onSelected: (value) async {
+                            if (value == 'delete') {
+                              await cubit.removeUserFromCourse(
+                                course['course'].id,
+                              );
+                            }
+                          },
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              );
+            },
+          ),
         );
       },
     );
@@ -209,66 +214,89 @@ class _MyLibraryState extends State<MyLibrary> {
 
         return cubit.state.loadStatus == LoadStatus.Loading
             ? const Center(child: CircularProgressIndicator())
-            : SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Header
-                  const SizedBox(height: 16),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                    child: const Text(
-                      'Khóa học của tôi',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w400,
+            : RefreshIndicator(
+              onRefresh: () async {
+                await cubit.fetchCourses();
+              },
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Header
+                    const SizedBox(height: 16),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                      child: const Text(
+                        'Khóa học của tôi',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w400,
+                        ),
                       ),
                     ),
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children:
-                        cubit.state.userCourses
-                            .map(
-                              (item) => CourseCard(
-                                course: item,
-                                popUpMenuItem: Align(
-                                  alignment: Alignment.centerRight,
-                                  child: PopupMenuButton(
-                                    itemBuilder: (context) {
-                                      return [
-                                        PopupMenuItem(
-                                          value: 'edit',
-                                          child: Text("Chỉnh sửa"),
-                                        ),
-                                        PopupMenuItem(
-                                          value: 'delete',
-                                          child: Text("Xóa"),
-                                        ),
-                                      ];
-                                    },
-                                    onSelected: (value) async {
-                                      if (value == 'edit') {
-                                        Navigator.of(context).pushNamed(
-                                          AddCourseScreen.route,
-                                          arguments: {
-                                            'courseId': item['course'].id,
-                                            'isAddCourse': false,
-                                          },
-                                        );
-                                      } else if (value == 'delete') {
-                                        await cubit.deleteCourse(
-                                          item['course'].id,
-                                        );
-                                      }
-                                    },
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children:
+                          cubit.state.userCourses
+                              .map(
+                                (item) => CourseCard(
+                                  course: item,
+                                  popUpMenuItem: Align(
+                                    alignment: Alignment.centerRight,
+                                    child: PopupMenuButton(
+                                      itemBuilder: (context) {
+                                        return [
+                                          PopupMenuItem(
+                                            value: 'edit',
+                                            child: Text("Chỉnh sửa"),
+                                          ),
+                                          PopupMenuItem(
+                                            value: 'delete',
+                                            child: Text("Xóa"),
+                                          ),
+                                          PopupMenuItem(
+                                            value: 'isPublic',
+                                            child: Text(
+                                              "Trạng thái: ${item['course'].isPublic ? 'Công khai' : 'Riêng tư'}",
+                                            ),
+                                          ),
+                                        ];
+                                      },
+                                      onSelected: (value) async {
+                                        if (value == 'edit') {
+                                          Navigator.of(context).pushNamed(
+                                            AddCourseScreen.route,
+                                            arguments: {
+                                              'courseId': item['course'].id,
+                                              'isAddCourse': false,
+                                            },
+                                          );
+                                        } else if (value == 'delete') {
+                                          await cubit.deleteCourse(
+                                            item['course'].id,
+                                          );
+                                        } else if (value == 'isPublic') {
+                                          if (item['course'].isPublic) {
+                                            await cubit.setPublicCourse(
+                                              item['course'].id,
+                                              false,
+                                            );
+                                          } else {
+                                            await cubit.setPublicCourse(
+                                              item['course'].id,
+                                              true,
+                                            );
+                                          }
+                                        }
+                                      },
+                                    ),
                                   ),
                                 ),
-                              ),
-                            )
-                            .toList(),
-                  ),
-                ],
+                              )
+                              .toList(),
+                    ),
+                  ],
+                ),
               ),
             );
       },

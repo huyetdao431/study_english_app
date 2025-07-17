@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:study_english_app/models/categories.dart';
 import 'package:study_english_app/models/user.dart';
 import 'package:study_english_app/models/word.dart';
+import 'package:study_english_app/screens/library_screen/cubit/library_cubit.dart';
 
 import '../models/courses.dart';
 
@@ -45,8 +46,6 @@ abstract class Api {
   Future<int> getLastUsernameChangeTime();
 
   // course management methods
-  Future<List<Courses>> getCourses();
-
   Future<List<Categories>> getCategories();
 
   Future<List<Word>> getWords(String courseId);
@@ -56,6 +55,10 @@ abstract class Api {
   Future<List<Map<String, dynamic>>> getUserCourses();
 
   Future<List<Map<String, dynamic>>> getLearnedCourses();
+
+  Future<List<String>> getCourseName();
+
+  Future<List<Map<String, dynamic>>> getCourses(String searchInfo);
 
   // Future<void> addCourseToUser(String courseId);
   //
@@ -70,6 +73,8 @@ abstract class Api {
   );
 
   Future<void> createCourse(String courseName, List<Word> words);
+
+  Future<void> setPublicCourse(String courseId, bool status);
 
   Future<void> deleteCourse(String courseId);
 

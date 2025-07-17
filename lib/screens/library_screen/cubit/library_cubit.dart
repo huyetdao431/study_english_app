@@ -42,6 +42,15 @@ class LibraryCubit extends Cubit<LibraryState> {
     }
   }
 
+  Future<void> setPublicCourse(String courseId, bool status) async {
+    emit(state.copyWith(loadStatus: LoadStatus.Loading));
+    try {
+      await api.setPublicCourse(courseId, status);
+      await fetchCourses();
+    } catch (e) {
+      emit(state.copyWith(loadStatus: LoadStatus.Error));
+    }
+  }
 
   Future<void> deleteCourse(String courseId) async {
     emit(state.copyWith(loadStatus: LoadStatus.Loading));

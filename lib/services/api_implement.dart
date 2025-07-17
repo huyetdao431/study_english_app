@@ -382,30 +382,21 @@ class ApiImplement implements Api {
   //</editor-fold>
 
   //<editor-fold desc="Course management Methods">
+
   @override
-  Future<List<Courses>> getCourses() async{
-    // return _firestore
-    //     .collection('courses')
-    //     .get()
-    //     .then((snapshot) {
-    //       return snapshot.docs.map((doc) {
-    //         final data = doc.data();
-    //         return Courses(
-    //           id: doc.id,
-    //           name: data['name'] ?? '',
-    //           totalWords: 0,
-    //           // Sẽ cập nhật sau khi lấy từ vựng
-    //           createdBy: data['createdBy'] ?? '',
-    //           createdAt:
-    //               (data['createdAt'] as Timestamp?)?.toDate() ?? DateTime.now(),
-    //           words: [],
-    //         );
-    //       }).toList();
-    //     })
-    //     .catchError((e) {
-    //       log.e('error', "Failed to get courses: $e");
-    //       return [];
-    //     });
+  Future<List<Map<String, dynamic>>> getCourses(String searchInfo) async{
+    try {
+      final snapshot = await _firestore.collection('courses').where('keyword', arrayContains: searchInfo.toLowerCase()).get();
+      final List<Map<String, dynamic>> courses = await Future.wait(
+        snapshot.docs.map((doc) async {
+          final courseId = doc.id;
+          return await getCourseById(courseId);
+        }),
+      );
+      return courses;
+    } catch (e) {
+      log.e('error', "Failed to search course: $e");
+    }
     return [];
   }
 
@@ -500,6 +491,17 @@ class ApiImplement implements Api {
     }
   }
 
+  @override
+  Future<List<String>> getCourseName() async{
+    try {
+      final courseDoc = await _firestore.collection('courses').get();
+      return courseDoc.docs.map((doc) => doc['name'] as String).toList();
+    } catch (e) {
+      log.e('error', "Failed to get courses: $e");
+      return [];
+    }
+  }
+
   // @override
   // Future<void> createCourse(String courseName, List<Word> words) async {
   //   try {
@@ -550,7 +552,7 @@ class ApiImplement implements Api {
       if (uid == null) return;
 
       final courseDocRef = _firestore.collection('courses').doc();
-
+      final keywords = generateKeywords(courseName);
       final batch = _firestore.batch();
 
       // 1. Ghi course chính
@@ -559,6 +561,8 @@ class ApiImplement implements Api {
         'createdBy': uid,
         'createdAt': FieldValue.serverTimestamp(),
         'totalWords': words.length,
+        'isPublic': true,
+        'keyword' : keywords,
       });
 
       // 2. Ghi courseId vào userCourses
@@ -674,6 +678,7 @@ class ApiImplement implements Api {
         'name': newName,
         'updatedAt': FieldValue.serverTimestamp(),
         'totalWords': words.length,
+        'keyword': generateKeywords(newName),
       });
 
       // 2. Xóa toàn bộ từ cũ
@@ -704,6 +709,16 @@ class ApiImplement implements Api {
       await userCourseRef.update({'updatedAt': FieldValue.serverTimestamp()});
     } catch (e) {
       log.e('error', "Cập nhật khóa học thất bại: $e");
+    }
+  }
+
+  @override
+  Future<void> setPublicCourse(String courseId, bool status) async{
+    try {
+      final courseRef = _firestore.collection('courses').doc(courseId);
+      await courseRef.update({'isPublic': status});
+    } catch (e) {
+      log.e('error', "Failed to set course public: $e");
     }
   }
 
@@ -748,6 +763,7 @@ class ApiImplement implements Api {
             createdBy: createdBy,
             createdAt: createdAt,
             words: words,
+            isPublic: data['isPublic'] ?? true,
           );
 
           return {
@@ -926,4 +942,21 @@ class ApiImplement implements Api {
   }
 
   //</editor-fold>
+
+  List<String> generateKeywords(String text) {
+    final words = text.toLowerCase().split(RegExp(r'\s+'));
+    final Set<String> keywords = {};
+
+    for (final word in words) {
+      // thêm cả từ đầy đủ
+      keywords.add(word);
+
+      // thêm các prefix của từ (để hỗ trợ tìm "foo" khớp "food")
+      for (int i = 1; i <= word.length; i++) {
+        keywords.add(word.substring(0, i));
+      }
+    }
+
+    return keywords.toList();
+  }
 }

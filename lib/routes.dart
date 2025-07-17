@@ -12,12 +12,14 @@ import 'package:study_english_app/screens/exam_screen/exam_screen.dart';
 import 'package:study_english_app/screens/flashcard_screen/flashcard_screen.dart';
 import 'package:study_english_app/screens/account_screen/account_screen.dart';
 import 'package:study_english_app/screens/home_screen/home_screen.dart';
+import 'package:study_english_app/screens/home_screen/notification_screen.dart';
 import 'package:study_english_app/screens/library_screen/library_screen.dart';
 import 'package:study_english_app/screens/login_screen/email_verification_screen.dart';
 import 'package:study_english_app/screens/main_screen/main_screen.dart';
 import 'package:study_english_app/screens/login_screen/login_screen.dart';
 import 'package:study_english_app/screens/login_screen/login_with_email.dart';
 import 'package:study_english_app/screens/login_screen/register_with_email.dart';
+import 'package:study_english_app/screens/search_screen/search_screen.dart';
 import 'package:study_english_app/screens/splash_screen.dart';
 import 'package:study_english_app/screens/study_screen/study_screen.dart';
 
@@ -39,6 +41,10 @@ Route<dynamic>? mainRoute(RouteSettings settings) {
       return MaterialPageRoute(builder: (context) => MainScreen());
     case HomeScreen.route:
       return MaterialPageRoute(builder: (context) => HomeScreen());
+    case NotificationScreen.route:
+      return MaterialPageRoute(builder: (context) => NotificationScreen());
+    case SearchScreen.route:
+      return MaterialPageRoute(builder: (context) => SearchScreen());
     case StudyScreen.route:
       var words =
           (settings.arguments as Map<String, dynamic>)['words'] as List<Word>;
