@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:study_english_app/core/color.dart';
 import 'package:study_english_app/screens/add_course_screen/add_course_screen.dart';
 import 'package:study_english_app/screens/library_screen/library_screen.dart';
+import 'package:study_english_app/screens/search_screen/search_screen.dart';
 import '../account_screen/account_screen.dart';
 import '../home_screen/home_screen.dart';
 
@@ -19,7 +20,7 @@ class _MainScreenState extends State<MainScreen> {
 
   final List<Widget> _pages = [
     HomeScreen(),
-    AccountScreen(),
+    SearchScreen(),
     Container(),
     LibraryScreen(),
     AccountScreen(),
@@ -51,11 +52,11 @@ class _MainScreenState extends State<MainScreen> {
           }
         },
         items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home, size: 30,), label: 'Trang chủ'),
-          BottomNavigationBarItem(icon: Icon(Icons.videogame_asset, size: 30,), label: 'Mini Game'),
-          BottomNavigationBarItem(icon: Icon(Icons.add_circle, size: 45), label: ''),
-          BottomNavigationBarItem(icon: Icon(Icons.folder_copy, size: 30,), label: 'Thư viện'),
-          BottomNavigationBarItem(icon: Icon(Icons.person, size: 30,), label: 'Tôi'),
+          BottomNavigationBarItem(icon: Icon(Icons.home, size: 25,), label: 'Trang chủ'),
+          BottomNavigationBarItem(icon: Icon(Icons.search, size: 25,), label: 'Search'),
+          BottomNavigationBarItem(icon: Icon(Icons.add_circle, size: 40), label: ''),
+          BottomNavigationBarItem(icon: Icon(Icons.folder_copy, size: 25,), label: 'Thư viện'),
+          BottomNavigationBarItem(icon: Icon(Icons.person, size: 25,), label: 'Tôi'),
         ],
       ),
     );
@@ -67,24 +68,31 @@ class _MainScreenState extends State<MainScreen> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Text('Settings', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+          const Text('Thêm mới', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
           const SizedBox(height: 16),
           InkWell(
             onTap: () {
-              Navigator.pop(context); // Đóng bottom sheet
+              Navigator.pop(context);
               Navigator.pushNamed(context, AddCourseScreen.route, arguments: {
                 'isAddCourse': true,
                 'courseId': '',
               });
             },
-            child: Row(
-              children: const [
-                Icon(Icons.add, size: 24),
-                SizedBox(width: 8),
-                Text('Tạo mới khóa học', style: TextStyle(fontSize: 18)),
-                Spacer(),
-                Icon(Icons.navigate_next),
-              ],
+            child: Container(
+              height: 60,
+              decoration: BoxDecoration(
+                color: AppColors.darkWhite,
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: AppColors.primaryDark)
+              ),
+              child: Row(
+                children: const [
+                  SizedBox(width: 8),
+                  Text('Tạo mới khóa học', style: TextStyle(fontSize: 18)),
+                  Spacer(),
+                  Icon(Icons.navigate_next),
+                ],
+              ),
             ),
           ),
           const SizedBox(height: 32),

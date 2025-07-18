@@ -118,6 +118,9 @@ class _EditUserInfoScreenState extends State<EditUserInfoScreen> {
                             context,
                             'Thông báo',
                             'Đổi mật khẩu thành công!',
+                             onClick: (){
+                              Navigator.of(context).pop();
+                              },
                           );
                         } else if (cubit.state.loadStatus ==
                             LoadStatus.Error) {
@@ -159,6 +162,9 @@ class _EditUserInfoScreenState extends State<EditUserInfoScreen> {
                               context,
                               'Thông báo',
                               'Đổi tên người dùng thành công!',
+                              onClick: (){
+                                Navigator.of(context).pop();
+                              },
                             );
                           } else if (cubit.state.loadStatus ==
                               LoadStatus.Error) {

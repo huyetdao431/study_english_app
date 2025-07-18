@@ -40,13 +40,13 @@ dependencies:
   firebase_auth: ^5.6.0
   cloud_firestore: ^5.6.9
   google_sign_in: ^6.2.1
-  convex_bottom_bar: ^3.2.0
   carousel_slider: ^5.1.1
   flip_card: ^0.7.0
   flutter_tts: ^4.2.3
   shared_preferences: ^2.5.3
   photo_view: ^0.15.0
   percent_indicator: ^4.2.5
+  font_awesome_flutter: ^10.8.0
 
 dev_dependencies:
   flutter_test:

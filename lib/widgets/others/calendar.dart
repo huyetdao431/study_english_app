@@ -1,55 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:study_english_app/core/color.dart';
 import 'package:study_english_app/core/text.dart';
 
-Widget calendar(double width) {
-  DateTime dateTime = DateTime.now();
-  int weekday = dateTime.weekday;
-  int day = dateTime.day;
-  int month = dateTime.month;
-  int year = dateTime.year;
-  var monthsHave31Days = [1, 3, 5, 7, 8, 10, 12];
-  var dayOfWeek = ['Mon', 'Tue', 'Wed', "Thu", 'Fri', 'Sat', 'Sun'];
-  var weekdays = [];
-  for (int i = weekday - 1; i >= 1; i--) {
-    if (day - i < 0) {
-      if (month == 2) {
-        if (isLeapYear(year)) {
-          weekday = 29;
-        } else {
-          weekday = 28;
-        }
-      } else if (monthsHave31Days.contains(month)) {
-        weekday = 30;
-      } else {
-        weekday = 31;
-      }
-    }
-    weekdays.add(day - i);
-  }
-  weekday = dateTime.weekday;
-  for (int i = 0; i <= 7 - weekday; i++) {
-    if (month == 2) {
-      if (isLeapYear(year)) {
-        if (day + i > 29) {
-          day = 1;
-        }
-      } else {
-        if (day + i > 28) {
-          day = 1;
-        }
-      }
-    } else if (monthsHave31Days.contains(month)) {
-      if (day + i > 30) {
-        day = 1;
-      }
-    } else {
-      if (day + i > 31) {
-        day = 1;
-      }
-    }
-    weekdays.add(day + i);
-  }
+Widget calendar(double width, Map<String, dynamic> streak) {
+  final streakDates =
+      (streak['streakHistory'] != null)
+          ? (streak['streakHistory'] as List<dynamic>)
+              .map((date) => DateTime.parse(date as String))
+              .toList()
+          : [];
+  final now = DateTime.now();
+  final startOfWeek = now.subtract(Duration(days: now.weekday - 1)); // Monday
+  final days = List.generate(
+    7,
+    (index) => startOfWeek.add(Duration(days: index)),
+  );
+  final dayOfWeek = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+
   return Container(
     width: width - 16,
     decoration: BoxDecoration(
@@ -57,56 +25,114 @@ Widget calendar(double width) {
       border: Border.all(color: AppColors.lightGray, width: 2),
     ),
     child: Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      mainAxisSize: MainAxisSize.max,
       children: [
-        SizedBox(height: 8,),
-        Text("Chuỗi 1 tuần", style: AppTextStyles.title),
-        SizedBox(height: 16),
-        Icon(Icons.calendar_month, size: 100, color: AppColors.warningOrange,),
-        SizedBox(height: 16),
+        const SizedBox(height: 8),
+        Text("Chuỗi ${streak['streak']} ngày", style: AppTextStyles.title),
+        const SizedBox(height: 16),
+        Icon(FontAwesomeIcons.fire, size: 80, color: AppColors.warningOrange),
+        const SizedBox(height: 16),
         Text("Hãy học để duy trì chuỗi của bạn!", style: AppTextStyles.title),
-        SizedBox(height: 16),
+        const SizedBox(height: 16),
         Padding(
-          padding: EdgeInsets.all(16),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
+          padding: const EdgeInsets.all(16),
+          child: Stack(
             children: [
-              for (int i = 0; i < 7; i++)
-                Column(
-                  children: [
-                    Text(dayOfWeek[i].toString(), style: AppTextStyles.bold),
-                    SizedBox(height: 16),
-                    DecoratedBox(
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: AppColors.warningOrange,
-                      ),
-                      child: SizedBox(
-                        height: 32,
-                        width: 32,
-                        child: Center(
-                          child: Text(
-                            weekdays[i].toString(),
-                            style: AppTextStyles.bold,
-                          ),
+              Container(
+                margin: const EdgeInsets.only(top: 34),
+                height: 36,
+                width: width,
+                decoration: BoxDecoration(
+                  color: AppColors.lightGray,
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                child: Row(
+                  children: List.generate(7, (i) {
+                    final day = days[i];
+                    final isStreak = streakDates.any((d) =>
+                    d.year == day.year && d.month == day.month && d.day == day.day);
+
+                    final prevIsStreak = i > 0
+                        ? streakDates.any((d) =>
+                    d.year == days[i - 1].year &&
+                        d.month == days[i - 1].month &&
+                        d.day == days[i - 1].day)
+                        : false;
+
+                    final nextIsStreak = i < 6
+                        ? streakDates.any((d) =>
+                    d.year == days[i + 1].year &&
+                        d.month == days[i + 1].month &&
+                        d.day == days[i + 1].day)
+                        : false;
+
+                    BorderRadius radius = BorderRadius.zero;
+                    if (isStreak) {
+                      if (!prevIsStreak && !nextIsStreak) {
+                        // đứng một mình
+                        radius = BorderRadius.circular(16);
+                      } else if (!prevIsStreak && nextIsStreak) {
+                        // bắt đầu chuỗi
+                        radius = const BorderRadius.horizontal(left: Radius.circular(16));
+                      } else if (prevIsStreak && !nextIsStreak) {
+                        // kết thúc chuỗi
+                        radius = const BorderRadius.horizontal(right: Radius.circular(16));
+                      }
+                      // nếu ở giữa chuỗi thì không cần bo
+                    }
+
+                    return Expanded(
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: isStreak
+                              ? AppColors.warningOrange.withAlpha(50)
+                              : AppColors.lightGray,
+                          borderRadius: radius,
                         ),
                       ),
-                    ),
-                  ],
+                    );
+                  }),
                 ),
-            ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: List.generate(7, (i) {
+                  final day = days[i];
+                  final isStreak = streakDates.any(
+                        (d) =>
+                    d.year == day.year &&
+                        d.month == day.month &&
+                        d.day == day.day,
+                  );
+
+                  return Column(
+                    children: [
+                      Text(dayOfWeek[i], style: AppTextStyles.bold),
+                      const SizedBox(height: 16),
+                      Stack(
+                        children: [
+                          isStreak
+                              ? Icon(
+                            FontAwesomeIcons.fireFlameSimple,
+                            size: 32,
+                            color: AppColors.warningOrange,
+                          )
+                              : SizedBox(),
+                          SizedBox(
+                            height: 32,
+                            width: 32,
+                            child: Center(child: !isStreak ? Text('${day.day}', style: TextStyle(fontWeight: FontWeight.bold),) : null),
+                          ),
+                        ],
+                      ),
+                    ],
+                  );
+                }),
+              ),
+            ]
           ),
         ),
-        SizedBox(height: 16,)
+        const SizedBox(height: 16),
       ],
     ),
   );
-}
-
-bool isLeapYear(int year) {
-  if (year % 4 != 0) return false;
-  if (year % 100 != 0) return true;
-  if (year % 400 != 0) return false;
-  return true;
 }

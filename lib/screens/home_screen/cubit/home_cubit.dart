@@ -10,13 +10,28 @@ class HomeCubit extends Cubit<HomeState> {
   Api api;
   HomeCubit(this.api) : super(HomeState.init());
 
-  Future<void> fetchUser() async {
+  Future<void> fetchData() async {
     emit(state.copyWith(loadStatus: LoadStatus.Loading));
     try {
-      UserInformation userInfo = await api.getUser();
+      final result = await Future.wait([
+        api.getUser(),
+        api.updateStreak(),
+        api.getStreak(),
+        api.getLearnedCourses(),
+        api.getCourses('a'),
+      ]);
+      UserInformation userInfo = result[0] as UserInformation;
+      Map<String, dynamic> streak = result[2] as Map<String, dynamic>;
+      List<Map<String, dynamic>> latestCourse = result[3] as List<Map<String, dynamic>>;
+      List<Map<String, dynamic>> suggestCourses = result[4] as List<Map<String, dynamic>>;
+      latestCourse.shuffle();
+      suggestCourses.shuffle();
       emit(state.copyWith(
         loadStatus: LoadStatus.Success,
         userInfo: userInfo,
+        streak: streak,
+        latestCourse: latestCourse.isEmpty ? {} : latestCourse.first,
+        suggestCourse: suggestCourses.take(3).toList(),
       ));
     } catch (e) {
       emit(state.copyWith(

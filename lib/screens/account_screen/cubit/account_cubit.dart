@@ -15,7 +15,8 @@ class AccountCubit extends Cubit<AccountState> {
     try {
       UserInformation user = await api.getUser();
       int usernameChangeTime = await api.getLastUsernameChangeTime();
-      emit(state.copyWith(loadStatus: LoadStatus.Success, user: user, usernameChangeTime: usernameChangeTime));
+      Map<String, dynamic> streak = await api.getStreak();
+      emit(state.copyWith(loadStatus: LoadStatus.Success, user: user, usernameChangeTime: usernameChangeTime, streak: streak));
     } catch (e) {
       emit(state.copyWith(loadStatus: LoadStatus.Error));
     }
@@ -64,7 +65,6 @@ class AccountCubit extends Cubit<AccountState> {
   Future<void> checkChangeEmailVerified(String newEmail) async {
     try {
       bool isEmailChanged = await api.checkEmailChangeVerified(newEmail);
-      print(isEmailChanged);
       if (isEmailChanged) {
         emit(state.copyWith(loadStatus: LoadStatus.Success, user: state.user.copyWith(email: newEmail)));
       }

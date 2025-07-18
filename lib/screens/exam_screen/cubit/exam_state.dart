@@ -2,6 +2,7 @@ part of 'exam_cubit.dart';
 
 class ExamState {
   final LoadStatus loadStatus;
+  final List<Word> words;
   final int numberOfQuestions;
   final int currentQuestionIndex;
   final bool isAnswerSelected;
@@ -16,6 +17,7 @@ class ExamState {
 
   const ExamState.init({
     this.loadStatus = LoadStatus.Init,
+    this.words = const [],
     this.numberOfQuestions = 0,
     this.currentQuestionIndex = 0,
     this.isAnswerSelected = false,
@@ -32,6 +34,7 @@ class ExamState {
   //<editor-fold desc="Data Methods">
   const ExamState({
     required this.loadStatus,
+    required this.words,
     required this.numberOfQuestions,
     required this.currentQuestionIndex,
     required this.isAnswerSelected,
@@ -51,6 +54,7 @@ class ExamState {
       (other is ExamState &&
           runtimeType == other.runtimeType &&
           loadStatus == other.loadStatus &&
+          words == other.words &&
           numberOfQuestions == other.numberOfQuestions &&
           currentQuestionIndex == other.currentQuestionIndex &&
           isAnswerSelected == other.isAnswerSelected &&
@@ -66,6 +70,7 @@ class ExamState {
   @override
   int get hashCode =>
       loadStatus.hashCode ^
+      words.hashCode ^
       numberOfQuestions.hashCode ^
       currentQuestionIndex.hashCode ^
       isAnswerSelected.hashCode ^
@@ -82,6 +87,7 @@ class ExamState {
   String toString() {
     return 'ExamState{' +
         ' loadStatus: $loadStatus,' +
+        ' words: $words,' +
         ' numberOfQuestions: $numberOfQuestions,' +
         ' currentQuestionIndex: $currentQuestionIndex,' +
         ' isAnswerSelected: $isAnswerSelected,' +
@@ -98,6 +104,7 @@ class ExamState {
 
   ExamState copyWith({
     LoadStatus? loadStatus,
+    List<Word>? words,
     int? numberOfQuestions,
     int? currentQuestionIndex,
     bool? isAnswerSelected,
@@ -112,6 +119,7 @@ class ExamState {
   }) {
     return ExamState(
       loadStatus: loadStatus ?? this.loadStatus,
+      words: words ?? this.words,
       numberOfQuestions: numberOfQuestions ?? this.numberOfQuestions,
       currentQuestionIndex: currentQuestionIndex ?? this.currentQuestionIndex,
       isAnswerSelected: isAnswerSelected ?? this.isAnswerSelected,
@@ -129,6 +137,7 @@ class ExamState {
   Map<String, dynamic> toMap() {
     return {
       'loadStatus': this.loadStatus,
+      'words': this.words,
       'numberOfQuestions': this.numberOfQuestions,
       'currentQuestionIndex': this.currentQuestionIndex,
       'isAnswerSelected': this.isAnswerSelected,
@@ -146,6 +155,7 @@ class ExamState {
   factory ExamState.fromMap(Map<String, dynamic> map) {
     return ExamState(
       loadStatus: map['loadStatus'] as LoadStatus,
+      words: map['words'] as List<Word>,
       numberOfQuestions: map['numberOfQuestions'] as int,
       currentQuestionIndex: map['currentQuestionIndex'] as int,
       isAnswerSelected: map['isAnswerSelected'] as bool,

@@ -367,7 +367,7 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
                             lineWidth: 12,
                             percent: learnedCount / widget.words.length,
                             center: Text(
-                              '${learnedCount / widget.words.length * 100}%',
+                              '${(learnedCount / widget.words.length * 100).ceil()}%',
                               style: TextStyle(
                                 fontSize: 24,
                                 color: AppColors.successGreen,

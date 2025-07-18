@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:study_english_app/screens/account_screen/achievement_screen.dart';
 import 'package:study_english_app/screens/account_screen/avatar_screen.dart';
 import 'package:study_english_app/screens/account_screen/cubit/account_cubit.dart';
 import 'package:study_english_app/screens/account_screen/edit_user_info_screen.dart';
@@ -124,6 +125,16 @@ Route<dynamic>? mainRoute(RouteSettings settings) {
             (context) => BlocProvider.value(
               value: cubit,
               child: ImagePreviewScreen(index: index),
+            ),
+      );
+    case AchievementScreen.route:
+      var cubit =
+          (settings.arguments as Map<String, dynamic>)['cubit'] as AccountCubit;
+      return MaterialPageRoute(
+        builder:
+            (context) => BlocProvider.value(
+              value: cubit,
+              child: AchievementScreen(),
             ),
       );
     default:

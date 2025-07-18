@@ -1,6 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:study_english_app/common/enum/load_status.dart';
 import 'package:study_english_app/screens/card_merge_screen/card_merge_screen.dart';
 import 'package:study_english_app/screens/course_detail/cubit/course_detail_cubit.dart';
@@ -290,7 +291,7 @@ class MiniGameNavigatorLabel extends StatelessWidget {
                   await cubit.addCourseToUser(state.courseId);
                 },
                 icon: Icon(
-                  Icons.file_copy,
+                  Icons.filter_none,
                   color: AppColors.primaryDark,
                   size: 30,
                 ),
@@ -310,7 +311,7 @@ class MiniGameNavigatorLabel extends StatelessWidget {
                   await cubit.addCourseToUser(state.courseId);
                 },
                 icon: Icon(
-                  Icons.file_copy,
+                  Icons.question_answer_outlined,
                   color: AppColors.primaryDark,
                   size: 30,
                 ),
@@ -330,7 +331,7 @@ class MiniGameNavigatorLabel extends StatelessWidget {
                   await cubit.addCourseToUser(state.courseId);
                 },
                 icon: Icon(
-                  Icons.file_copy,
+                  Icons.picture_in_picture_alt,
                   color: AppColors.primaryDark,
                   size: 30,
                 ),
@@ -350,7 +351,7 @@ class MiniGameNavigatorLabel extends StatelessWidget {
                   await cubit.addCourseToUser(state.courseId);
                 },
                 icon: Icon(
-                  Icons.file_copy,
+                  FontAwesomeIcons.fileLines,
                   color: AppColors.primaryDark,
                   size: 30,
                 ),

@@ -3,7 +3,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:study_english_app/models/courses.dart';
-import 'package:study_english_app/models/categories.dart';
 import 'package:study_english_app/models/user.dart';
 import 'package:study_english_app/models/word.dart';
 import 'package:study_english_app/services/api.dart';
@@ -269,15 +268,15 @@ class ApiImplement implements Api {
       return false;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'wrong-password') {
-        log.e('error', "❌ Sai mật khẩu!");
+        log.e('error', " Sai mật khẩu!");
       } else if (e.code == 'user-mismatch') {
-        log.e('error', "❌ Tài khoản không khớp khi xác thực lại!");
+        log.e('error', " Tài khoản không khớp khi xác thực lại!");
       } else {
-        log.e('error', "❌ Lỗi Firebase: ${e.code}");
+        log.e('error', " Lỗi Firebase: ${e.code}");
       }
       return false;
     } catch (e) {
-      log.e('error', "❌ Lỗi không xác định: $e");
+      log.e('error', " Lỗi không xác định: $e");
       return false;
     }
   }
@@ -302,7 +301,7 @@ class ApiImplement implements Api {
     try {
       final user = _auth.currentUser;
       if (user != null) {
-        user.verifyBeforeUpdateEmail(email);
+        await user.verifyBeforeUpdateEmail(email);
       }
     } catch (e) {
       log.e('error', "Failed to update email: $e");
@@ -398,19 +397,6 @@ class ApiImplement implements Api {
       log.e('error', "Failed to search course: $e");
     }
     return [];
-  }
-
-  @override
-  Future<List<Categories>> getCategories() async {
-    try {
-      final snapshot = await _firestore.collection('categories').get();
-      return snapshot.docs.map((doc) {
-        return Categories.fromMap(doc.data());
-      }).toList();
-    } catch (e) {
-      log.e('error', "Failed to get topics: $e");
-      return [];
-    }
   }
 
   @override
@@ -781,6 +767,81 @@ class ApiImplement implements Api {
     return {};
   }
 
+  @override
+  Future<void> updateStreak() async{
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final userId = prefs.getString('uid');
+      if(userId == null) return;
+
+      final userRef = _firestore.collection('accounts').doc(userId);
+      final doc = await userRef.get();
+      final data = doc.data();
+
+      if (data == null) return;
+
+      final now = DateTime.now();
+      final today = DateTime(now.year, now.month, now.day);
+
+      final lastLoginStr = data['lastLoginDate'];
+      final currentStreak = data['streak'] ?? 0;
+      final history = List<String>.from(data['streakHistory'] ?? []);
+
+      DateTime? lastLogin;
+      if (lastLoginStr != null) {
+        lastLogin = DateTime.tryParse(lastLoginStr);
+      }
+
+      if (lastLogin != null && today.difference(lastLogin).inDays == 1) {
+        // học liên tục
+        await userRef.update({
+          'streak': currentStreak + 1,
+          'lastLoginDate': today.toIso8601String(),
+          'streakHistory': [...history, today.toIso8601String()],
+        });
+      } else if (lastLogin == null || today.isAfter(lastLogin)) {
+        // học lại sau khi nghỉ / lần đầu
+        await userRef.update({
+          'streak': 1,
+          'lastLoginDate': today.toIso8601String(),
+          'streakHistory': [today.toIso8601String()],
+        });
+      }
+    } catch (e) {
+      log.e('error', "Failed to update Streak: $e");
+    }
+  }
+
+  @override
+  Future<Map<String, dynamic>> getStreak() async {
+    final prefs = await SharedPreferences.getInstance();
+    String? uid = prefs.getString('uid');
+    if (uid == null) throw Exception("User not logged in");
+
+    final userRef = _firestore.collection('accounts').doc(uid);
+    final doc = await userRef.get();
+
+    if (!doc.exists) {
+      return {
+        'streak': 0,
+        'lastLoginDate': null,
+        'streakHistory': [],
+      };
+    }
+
+    final data = doc.data()!;
+    final streak = data['streak'] ?? 0;
+    final lastLoginDate = data['lastLoginDate'];
+    final history = List<String>.from(data['streakHistory'] ?? []);
+
+    return {
+      'streak': streak,
+      'lastLoginDate': lastLoginDate,
+      'streakHistory': history,
+    };
+  }
+
+
   // @override
   // Future<void> addCourseToUser(String courseId) async {
   //   try {
@@ -948,10 +1009,7 @@ class ApiImplement implements Api {
     final Set<String> keywords = {};
 
     for (final word in words) {
-      // thêm cả từ đầy đủ
       keywords.add(word);
-
-      // thêm các prefix của từ (để hỗ trợ tìm "foo" khớp "food")
       for (int i = 1; i <= word.length; i++) {
         keywords.add(word.substring(0, i));
       }

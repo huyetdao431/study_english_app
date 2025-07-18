@@ -168,7 +168,7 @@ class _StudyScreenState extends State<StudyScreen> {
                             lineWidth: 12,
                             percent: totalCorrect / widget.words.length,
                             center: Text(
-                              '${totalCorrect / widget.words.length * 100}%',
+                              '${(totalCorrect / widget.words.length * 100).ceil()}%',
                               style: TextStyle(
                                 fontSize: 24,
                                 color: AppColors.successGreen,

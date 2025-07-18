@@ -4,12 +4,14 @@ class AccountState {
   final UserInformation user;
   final bool isReAuthenticated;
   final int usernameChangeTime;
+  final Map<String, dynamic> streak;
   final LoadStatus loadStatus;
 
   const AccountState.init({
     this.user = const UserInformation.init(),
     this.isReAuthenticated = false,
     this.usernameChangeTime = 0,
+    this.streak = const {},
     this.loadStatus = LoadStatus.Init,
   });
 
@@ -18,6 +20,7 @@ class AccountState {
     required this.user,
     required this.isReAuthenticated,
     required this.usernameChangeTime,
+    required this.streak,
     required this.loadStatus,
   });
 
@@ -29,6 +32,7 @@ class AccountState {
           user == other.user &&
           isReAuthenticated == other.isReAuthenticated &&
           usernameChangeTime == other.usernameChangeTime &&
+          streak == other.streak &&
           loadStatus == other.loadStatus);
 
   @override
@@ -36,6 +40,7 @@ class AccountState {
       user.hashCode ^
       isReAuthenticated.hashCode ^
       usernameChangeTime.hashCode ^
+      streak.hashCode ^
       loadStatus.hashCode;
 
   @override
@@ -44,6 +49,7 @@ class AccountState {
         ' user: $user,' +
         ' isReAuthenticated: $isReAuthenticated,' +
         ' usernameChangeTime: $usernameChangeTime,' +
+        ' streak: $streak,' +
         ' loadStatus: $loadStatus,' +
         '}';
   }
@@ -52,12 +58,14 @@ class AccountState {
     UserInformation? user,
     bool? isReAuthenticated,
     int? usernameChangeTime,
+    Map<String, dynamic>? streak,
     LoadStatus? loadStatus,
   }) {
     return AccountState(
       user: user ?? this.user,
       isReAuthenticated: isReAuthenticated ?? this.isReAuthenticated,
       usernameChangeTime: usernameChangeTime ?? this.usernameChangeTime,
+      streak: streak ?? this.streak,
       loadStatus: loadStatus ?? this.loadStatus,
     );
   }
@@ -67,6 +75,7 @@ class AccountState {
       'user': this.user,
       'isReAuthenticated': this.isReAuthenticated,
       'usernameChangeTime': this.usernameChangeTime,
+      'streak': this.streak,
       'loadStatus': this.loadStatus,
     };
   }
@@ -76,6 +85,7 @@ class AccountState {
       user: map['user'] as UserInformation,
       isReAuthenticated: map['isReAuthenticated'] as bool,
       usernameChangeTime: map['usernameChangeTime'] as int,
+      streak: map['streak'] as Map<String, dynamic>,
       loadStatus: map['loadStatus'] as LoadStatus,
     );
   }

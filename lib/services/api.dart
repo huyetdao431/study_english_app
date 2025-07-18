@@ -1,10 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:study_english_app/models/categories.dart';
 import 'package:study_english_app/models/user.dart';
 import 'package:study_english_app/models/word.dart';
-import 'package:study_english_app/screens/library_screen/cubit/library_cubit.dart';
-
-import '../models/courses.dart';
 
 abstract class Api {
   //authentication methods
@@ -46,7 +42,6 @@ abstract class Api {
   Future<int> getLastUsernameChangeTime();
 
   // course management methods
-  Future<List<Categories>> getCategories();
 
   Future<List<Word>> getWords(String courseId);
 
@@ -59,6 +54,10 @@ abstract class Api {
   Future<List<String>> getCourseName();
 
   Future<List<Map<String, dynamic>>> getCourses(String searchInfo);
+
+  Future<Map<String, dynamic>> getStreak();
+
+  Future<void> updateStreak();
 
   // Future<void> addCourseToUser(String courseId);
   //

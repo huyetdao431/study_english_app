@@ -24,7 +24,7 @@ class _ExamScreenState extends State<ExamScreen> {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => ExamCubit(),
-      child: Scaffold(appBar: AppBar(), body: Page(words: widget.words)),
+      child: Page(words: widget.words),
     );
   }
 }
@@ -44,127 +44,141 @@ class _PageState extends State<Page> {
   );
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    context.read<ExamCubit>().setWords(widget.words);
+  }
+
+  @override
   Widget build(BuildContext context) {
     return BlocBuilder<ExamCubit, ExamState>(
       builder: (context, state) {
         var cubit = context.read<ExamCubit>();
-        return Padding(
-          padding: const EdgeInsets.all(12.0),
-          child:
-          !cubit.state.isExamStarted
-              ? Column(
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              SizedBox(height: 12),
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  'Thiết lập bài thi',
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.black,
-                  ),
-                ),
-              ),
-              SizedBox(height: 24),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  Text(
-                    'Số lượng câu hỏi (tối đa ${widget.words.length})',
+        return Scaffold(
+          appBar: AppBar(
+            title: state.currentQuestionIndex < cubit.state.numberOfQuestions && cubit.state.isExamStarted ? Text('${cubit.state.currentQuestionIndex+1}/${cubit.state.numberOfQuestions}') : null,
+            centerTitle: true,
+          ),
+          body: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12.0),
+            child:
+            !cubit.state.isExamStarted
+                ? Column(
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                SizedBox(height: 12),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    'Thiết lập bài thi',
                     style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
                       color: AppColors.black,
                     ),
                   ),
-                  SizedBox(
-                    width: 100,
-                    child: TextField(
-                      controller: numberOfQuestionsController,
-                      keyboardType: TextInputType.number,
-                      textDirection: TextDirection.rtl,
-                      onChanged: (value) {
-                        setState(() {
-                          final number = int.tryParse(value);
-                          if (number != null &&
-                              number > widget.words.length) {
-                            numberOfQuestionsController.text =
-                                widget.words.length.toString();
-                            cubit.setNumberOfQuestions(number);
-                          } else {
-                            cubit.setNumberOfQuestions(number ?? 0);
-                          }
-                        });
-                      },
+                ),
+                SizedBox(height: 24),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    Text(
+                      'Số lượng câu hỏi (tối đa ${widget.words.length})',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                        color: AppColors.black,
+                      ),
                     ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 24),
-              SwitchButtonWithTitle(
-                title: 'Hiển thị đáp án ngay',
-                value: cubit.state.isShowAnswer,
-                onChanged: (value) {
+                    SizedBox(
+                      width: 100,
+                      child: TextField(
+                        controller: numberOfQuestionsController,
+                        keyboardType: TextInputType.number,
+                        textDirection: TextDirection.rtl,
+                        onChanged: (value) {
+                          setState(() {
+                            final number = int.tryParse(value);
+                            if (number != null &&
+                                number > widget.words.length) {
+                              numberOfQuestionsController.text =
+                                  widget.words.length.toString();
+                              cubit.setNumberOfQuestions(number);
+                            } else {
+                              cubit.setNumberOfQuestions(number ?? 0);
+                            }
+                          });
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 24),
+                SwitchButtonWithTitle(
+                  title: 'Hiển thị đáp án ngay',
+                  value: cubit.state.isShowAnswer,
+                  onChanged: (value) {
+                    setState(() {
+                      cubit.setIsShowAnswer(value);
+                    });
+                  },
+                ),
+                SizedBox(height: 24),
+                Divider(color: AppColors.secondaryGray, thickness: 1),
+                SizedBox(height: 24),
+                SwitchButtonWithTitle(
+                  title: 'Đúng / Sai',
+                  value: cubit.state.isTrueOrFalse,
+                  onChanged: (value) {
+                    setState(() {
+                      cubit.setIsTrueOrFalse(value);
+                    });
+                  },
+                ),
+                SizedBox(height: 24),
+                SwitchButtonWithTitle(
+                  title: 'Nhiều lựa chọn',
+                  value: cubit.state.isMultipleChoice,
+                  onChanged: (value) {
+                    setState(() {
+                      cubit.setIsMultipleChoice(value);
+                    });
+                  },
+                ),
+                SizedBox(height: 24),
+                SwitchButtonWithTitle(
+                  title: 'Tự luận',
+                  value: cubit.state.isFillInTheBlank,
+                  onChanged: (value) {
+                    setState(() {
+                      cubit.setIsFillInTheBlank(value);
+                    });
+                  },
+                ),
+                Expanded(child: SizedBox()),
+                primaryButton(false, 'Bắt đầu làm bài kiểm tra', 16, () {
                   setState(() {
-                    cubit.setIsShowAnswer(value);
-                  });
-                },
-              ),
-              SizedBox(height: 24),
-              Divider(color: AppColors.secondaryGray, thickness: 1),
-              SizedBox(height: 24),
-              SwitchButtonWithTitle(
-                title: 'Đúng / Sai',
-                value: cubit.state.isTrueOrFalse,
-                onChanged: (value) {
-                  setState(() {
-                    cubit.setIsTrueOrFalse(value);
-                  });
-                },
-              ),
-              SizedBox(height: 24),
-              SwitchButtonWithTitle(
-                title: 'Nhiều lựa chọn',
-                value: cubit.state.isMultipleChoice,
-                onChanged: (value) {
-                  setState(() {
-                    cubit.setIsMultipleChoice(value);
-                  });
-                },
-              ),
-              SizedBox(height: 24),
-              SwitchButtonWithTitle(
-                title: 'Tự luận',
-                value: cubit.state.isFillInTheBlank,
-                onChanged: (value) {
-                  setState(() {
-                    cubit.setIsFillInTheBlank(value);
-                  });
-                },
-              ),
-              Expanded(child: SizedBox()),
-              primaryButton(false, 'Bắt đầu làm bài kiểm tra', 16, () {
-                setState(() {
-                  cubit.setNumberOfQuestions(
-                    int.tryParse(numberOfQuestionsController.text) ?? 0,
-                  );
-                  if (state.numberOfQuestions <= 0) {
-                    showMyDialog(
-                      context,
-                      'Thông báo',
-                      'Vui lòng nhập số lượng câu hỏi lớn hơn 0',
+                    cubit.setNumberOfQuestions(
+                      int.tryParse(numberOfQuestionsController.text) ?? 0,
                     );
-                  } else {
-                    cubit.setIsExamStarted(true);
-                  }
-                });
-              }),
-            ],
-          )
-              : QuestionPage(words: widget.words),
+                    if (state.numberOfQuestions <= 0) {
+                      showMyDialog(
+                        context,
+                        'Thông báo',
+                        'Vui lòng nhập số lượng câu hỏi lớn hơn 0',
+                      );
+                    } else {
+                      cubit.setIsExamStarted(true);
+                    }
+                  });
+                }),
+                SizedBox(height: 16,),
+              ],
+            )
+                : QuestionPage(words: widget.words),
+          ),
         );
       },
     );
@@ -203,6 +217,21 @@ class _QuestionPageState extends State<QuestionPage> {
             ? Center(child: CircularProgressIndicator())
             : Column(
           children: [
+            Container(
+              width: MediaQuery.sizeOf(context).width,
+              height: 2,
+              alignment: Alignment.centerLeft,
+              decoration: BoxDecoration(
+                color: AppColors.lightGray,
+              ),
+              child: Container(
+                width: MediaQuery.sizeOf(context).width/cubit.state.numberOfQuestions * (cubit.state.currentQuestionIndex+1),
+                decoration: BoxDecoration(
+                  color: AppColors.primaryBlue,
+                  borderRadius: BorderRadius.only(topRight: Radius.circular(16), bottomRight: Radius.circular(16)),
+                ),
+              ),
+            ),
             Expanded(
               child: switch (question['questionType']) {
                 'true_false' => TrueFalseQuestion(question: question),
@@ -230,6 +259,8 @@ class _QuestionPageState extends State<QuestionPage> {
               },
             )
                 : Container(),
+
+            SizedBox(height: 16,),
           ],
         )
             : CompleteScreen();
@@ -666,8 +697,8 @@ class CompleteScreen extends StatelessWidget {
                       percent:
                       state.totalCorrectAnswers / state.numberOfQuestions,
                       center: Text(
-                        '${state.totalCorrectAnswers / state.numberOfQuestions *
-                            100}%',
+                        '${(state.totalCorrectAnswers / state.numberOfQuestions *
+                            100).ceil()}%',
                         style: TextStyle(
                           fontSize: 24,
                           color: AppColors.successGreen,
@@ -755,8 +786,7 @@ class CompleteScreen extends StatelessWidget {
               ),
               SizedBox(height: 24),
               primaryButton(false, 'Làm lại bài kiểm tra', 16, () {
-                cubit.resetExam();
-                Navigator.pop(context);
+                Navigator.of(context).pushReplacementNamed(ExamScreen.route, arguments: {'words' : cubit.state.words});
               }),
               SizedBox(height: 16),
               primaryButton(false, 'Quay lại', 16, () {

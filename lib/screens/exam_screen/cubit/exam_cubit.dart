@@ -10,6 +10,10 @@ part 'exam_state.dart';
 class ExamCubit extends Cubit<ExamState> {
   ExamCubit() : super(ExamState.init());
 
+  void setWords(List<Word> words) {
+    emit(state.copyWith(words: words));
+  }
+
   void generateQuestions(
     List<Word> words,
   ) {
@@ -249,10 +253,11 @@ class ExamCubit extends Cubit<ExamState> {
     emit(state.copyWith(isShowAnswer: false));
   }
   void nextQuestion() {
-    if (state.currentQuestionIndex < state.questions.length - 1) {
+    if (state.currentQuestionIndex < state.questions.length) {
       emit(state.copyWith(currentQuestionIndex: state.currentQuestionIndex + 1));
     }
   }
+
   Map<String, dynamic> getCurrentQuestion() {
     if (state.currentQuestionIndex < state.questions.length) {
       return state.questions[state.currentQuestionIndex];
