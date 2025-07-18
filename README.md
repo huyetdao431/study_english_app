@@ -61,44 +61,32 @@
 
 ## 📱 Giao diện màn hình ứng dụng
 
-### 🏠 Màn hình chính
-![Home Screen](assets/screens/home_screen.png)
+<!-- Hàng 1 -->
+<p align="center">
+  <img src="assets/screens/account_screen.png" width="160"/>
+  <img src="assets/screens/account_setting_screen.png" width="160"/>
+  <img src="assets/screens/add_course_screen.png" width="160"/>
+  <img src="assets/screens/card_merge_screen.png" width="160"/>
+  <img src="assets/screens/course_detail_screen.png" width="160"/>
+</p>
 
-### 🔍 Màn hình tìm kiếm
-![Search Screen](assets/screens/search_screen.png)
+<!-- Hàng 2 -->
+<p align="center">
+  <img src="assets/screens/exam_screen.png" width="160"/>
+  <img src="assets/screens/flashcard_screen.png" width="160"/>
+  <img src="assets/screens/home_screen.png" width="160"/>
+  <img src="assets/screens/library_screen.png" width="160"/>
+  <img src="assets/screens/login_screen.png" width="160"/>
+</p>
 
-### 📚 Màn hình thư viện khóa học
-![Library Screen](assets/screens/library_screen.png)
+<!-- Hàng 3 -->
+<p align="center">
+  <img src="assets/screens/mini_game_screen.png" width="160"/>
+  <img src="assets/screens/register_screen.png" width="160"/>
+  <img src="assets/screens/result_screen.png" width="160"/>
+  <img src="assets/screens/search_screen.png" width="160"/>
+</p>
 
-### 🧠 Màn hình flashcard học từ
-![Flashcard Screen](assets/screens/flashcard_screen.png)
-
-### 📝 Màn hình làm bài kiểm tra
-![Exam Screen](assets/screens/exam_screen.png)
-
-### 🧩 Màn hình trò chơi nhỏ (mini-game)
-![Mini Game Screen](assets/screens/mini_game_screen.png)
-
-### ✅ Màn hình kết quả bài học
-![Result Screen](assets/screens/result_screen.png)
-
-### ➕ Màn hình thêm khóa học
-![Add Course Screen](assets/screens/add_course_screen.png)
-
-### ✏️ Màn hình chỉnh sửa ghép thẻ
-![Card Merge Screen](assets/screens/card_merge_screen.png)
-
-### 📖 Màn hình chi tiết khóa học
-![Course Detail Screen](assets/screens/course_detail_screen.png)
-
-### 👤 Màn hình tài khoản
-![Account Screen](assets/screens/account_screen.png)
-
-### ⚙️ Màn hình cài đặt tài khoản
-![Account Setting Screen](assets/screens/account_setting_screen.png)
-
-### 🔐 Màn hình đăng nhập
-![Login Screen](assets/screens/login_screen.png)
 
 ### 🆕 Màn hình đăng ký
 ![Register Screen](assets/screens/register_screen.png)
