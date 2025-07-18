@@ -57,11 +57,5 @@
 ## 📱 Demo ứng dụng
 
 ### 🔹 Video demo
-👉 [Xem video demo tại đây](https://www.youtube.com/watch?v=your_video_id)  
-(Hoặc bạn có thể để link Google Drive nếu không dùng YouTube)
-
-### 🔹 Ảnh màn hình
-| Trang chủ | Flashcard | Kết quả học tập |
-|----------|-----------|-----------------|
-| ![Home](screenshots/home.png) | ![Flashcard](screenshots/flashcard.png) | ![Result](screenshots/result.png) |
+👉 [Xem video demo tại đây](https://youtu.be/NWgOQN10ePY?si=5a4qdUdeeex8OOyI) 
 
