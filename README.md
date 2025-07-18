@@ -88,7 +88,3 @@
 </p>
 
 
-### 🆕 Màn hình đăng ký
-![Register Screen](assets/screens/register_screen.png)
-
-
